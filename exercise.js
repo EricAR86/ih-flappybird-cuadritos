@@ -1,29 +1,36 @@
-// index.js
 
-// DESARROLLO DE VIDEOJUEGO
-// 1. INSTANCIAMIENTO DEL ÁREA DE JUEGO
+
+// Creación del Videojuego
+
+// Crear del área del juego
 
 const myObstacles = []
 
 const myGameArea = {
     canvas: document.createElement("canvas"),
     frames: 0,
-    start: function() {
-        this.canvas.width = 500
+    start: function(){
+        this.canvas.width = 480
         this.canvas.height = 270
         this.context = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
 
-        // ESTABLECER EL MOTOR
+        // Establecer el motor
         this.interval = setInterval(updateGameArea, 20)
     },
+
+    // Borra todo lo que está en la seccion del canvas
     clear: function(){
         this.context.clearRect(0,0,this.canvas.width, this.canvas.height)
     },
+
+    // Detiene el juego cuando colisiona
     stop: function () {
         clearInterval(this.interval)
     }
 }
+
+// Se ejecuta en tiempo real las funciones para que funcione el juego
 
 const updateGameArea = () => {
     console.log("Ejecutando motor...")
@@ -34,42 +41,46 @@ const updateGameArea = () => {
     checkGameOver()
 }
 
+// Movimento del obstaculo de derecha a izquierda (hacia atrás)
+
 const updateObstacles = () => {
 
-    for(i = 0; i < myObstacles.length; i++){
+    for (i = 0; i < myObstacles.length; i++){
         myObstacles[i].x += -1
         myObstacles[i].update()
     }
 
-
-    myGameArea.frames += 1
+    myGameArea.frame += 1
 
     // SI LOS FRAMES SÍ SON DIVISIBLES ENTRE 120 Y EL RESIDUO ES CERO...
-    if(myGameArea.frames % 120 === 0){
+    if(myGameArea.frames % 123 === 0){
         console.log("Divisible entre 120")
-        // NECESITO CREAR OBSTÁCULOS
+
+        // Creacion de obstaculo
         let x = myGameArea.canvas.width
         let minHeight = 20
         let maxHeight = 200
-        //  20          #         200
-        // minHeight < height < maxHeight
+
+        // Crear un rango para el obstaculo
+        // Altura minima (20) < height (número) < altura maxima (200)
         let height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight)
         console.log(height)
 
+        // Crear espacio entre los Obstaculos
         let minGap = 50
         let maxGap = 200
         let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap)
 
-        // CREACIÓN DE OBSTÁCULOS
-        // PIPA DE ARRIBA
-        myObstacles.push(new Component(10, height, "green", x, 0))
-        myObstacles.push(new Component(10, x - height - gap, "green", x, height + gap ))
-    }
-    // SI LOS FRAMES NO SON DIVISIBLES ENTRE 120 (TENER UN RESIDUO DE CERO)
+        // Crear pipa de arriba
+        myObstacles.push(new Component(10, heigth, "green", x, 0 ))
 
+        // Crear pipa de abajo
+        myObstacles.push(new Component(10, x - height - gap, "green", x, height + gap))
+    }
 }
 
-// 2. COMPONENTES
+// Crear componentes o elementos del videojuego
+
 class Component {
     constructor(width, height, color, x, y){
         this.width = width
@@ -77,7 +88,8 @@ class Component {
         this.color = color
         this.x = x
         this.y = y
-        // SPEED PROPERTIES
+
+        // Propiedades de la velocidad
         this.speedX = 0
         this.speedY = 0
     }
@@ -90,10 +102,10 @@ class Component {
 
     newPos() {
         this.x += this.speedX
-        this.y += this.speedY        
+        this.y += this.speedY
     }
 
-    left() {
+    left(){
         return this.x
     }
 
@@ -109,20 +121,19 @@ class Component {
         return this.y + this.height
     }
 
-    // SÍ COLISIONÓ?
+    // Comprobacion para ver si el jugador colisionó
     crashWith(obstacle){
         return !(
-            this.bottom() < obstacle.top() || 
-            this.top() > obstacle.bottom() || 
-            this.right() < obstacle.left() || 
+            this.bottom() < obstacle.top() ||
+            this.top() > obstable.bottom() ||
+            this.right() < obstacle.left() ||
             this.left() > obstacle.right()
         )
-  }
+    }
 }
 
-
+// terminar la partida si el cuadrito chocó
 const checkGameOver = () => {
-    // CHOCÓ O NO CHOQUÉ?
     const crashed = myObstacles.some((element) => {
         return player.crashWith(element)
     })
@@ -130,19 +141,22 @@ const checkGameOver = () => {
     if(crashed){
         myGameArea.stop()
     }
-
     return
-
 }
 
+// Ejecuciones o comandos que hace el jugador
 
-    
-// EJECUCIONES
+// Empieza el juego
+
 myGameArea.start()
+
+// Se crea al jugador (el cuadro)
 
 const player = new Component(30,30, "red", 0, 110)
 
-// EVENTOS
+// Movimientos del jugador
+
+// lo que sucede cuando se aprieta una tecla
 document.addEventListener("keydown", (e) => {
 
     switch(e.key) {
@@ -158,11 +172,12 @@ document.addEventListener("keydown", (e) => {
         case "ArrowRight":
             player.speedX += 1
             break
-        default: 
+        default:
             break
     }
 })
 
+// lo que sucede cuando se suelta una tecla
 document.addEventListener("keyup", (e) => {
     player.speedX = 0
     player.speedY = 0
