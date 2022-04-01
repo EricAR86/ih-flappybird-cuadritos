@@ -22,7 +22,17 @@ const myGameArea = {
     },
     stop: function () {
         clearInterval(this.interval)
+    },
+    score: function() {
+        const points = Math.floor(this.frames / 5)
+
+        this.context.font = "18px arial"
+        this.context.fillStyle = "black"
+        this.context.fillText(`Score: ${points}`, 350, 50)
+        
+
     }
+    
 }
 
 const updateGameArea = () => {
@@ -32,6 +42,7 @@ const updateGameArea = () => {
     player.update()
     updateObstacles()
     checkGameOver()
+    myGameArea.score()
 }
 
 const updateObstacles = () => {

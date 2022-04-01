@@ -72,16 +72,16 @@ const updateObstacles = () => {
         let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap)
 
         // Crear pipa de arriba
-        myObstacles.push(new Component(10, heigth, "green", x, 0 ))
+        myObstacles.push(new Flappy(10, heigth, "green", x, 0 ))
 
         // Crear pipa de abajo
-        myObstacles.push(new Component(10, x - height - gap, "green", x, height + gap))
+        myObstacles.push(new Flappy(10, x - height - gap, "green", x, height + gap))
     }
 }
 
 // Crear componentes o elementos del videojuego
 
-class Component {
+/* class Component {
     constructor(width, height, color, x, y){
         this.width = width
         this.height = height
@@ -92,7 +92,24 @@ class Component {
         // Propiedades de la velocidad
         this.speedX = 0
         this.speedY = 0
-    }
+    } */
+    class Flappy {
+        constructor(x, y, w, h, imgs){
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.imgs1 = new Image();
+            this.imgs1.src = "https://sonarlearning.co.uk/images/icons/courseIcons/cocos2d-x-flappy-bird.png"
+            this.image = this.imgs1
+            
+            this.speedX = 0
+            this.speedY = 0
+        }
+    
+        draw(){
+            ctx.drawImage(this.image, this.x, this.y, this.w, this.h)
+        }
 
     update() {
         const ctx = myGameArea.context
@@ -152,7 +169,7 @@ myGameArea.start()
 
 // Se crea al jugador (el cuadro)
 
-const player = new Component(30,30, "red", 0, 110)
+const player = new Flappy(30,30, "red", 0, 110)
 
 // Movimientos del jugador
 
